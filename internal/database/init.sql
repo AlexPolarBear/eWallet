@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS wallets (
+	id TEXT PRIMARY KEY NOT NULL,
+	balance FLOAT8
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+	id SERIAL PRIMARY KEY NOT NULL,
+	time TIMESTAMP NOT NULL,
+	wallet_from TEXT REFERENCES wallets (id) NOT NULL,
+	wallet_to TEXT REFERENCES wallets (id) NOT NULL,
+	amount FLOAT8
+);
