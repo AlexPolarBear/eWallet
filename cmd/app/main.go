@@ -15,12 +15,12 @@ import (
 var port = 8000
 
 func main() {
-	connStr := "host=localhost port=5432 user=postgres " +
-		"password=password dbname=ewallet"
+	connStr := "host=db port=5432 user=postgres password=postgres dbname=ewallet"
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
+		log.Print(err)
 	}
 	defer db.Close()
 
