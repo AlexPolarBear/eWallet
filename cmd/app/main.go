@@ -15,13 +15,18 @@ import (
 var port = 8000
 
 func main() {
-	connStr := "host=db port=5432 user=postgres password=postgres dbname=ewallet"
+	connStr := "host=db port=5432 user=postgres password=postgres dbname=ewallet sslmode=disable"
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
-		log.Print(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	defer db.Close()
 
 	rout := mux.NewRouter()
@@ -34,23 +39,3 @@ func main() {
 	log.Printf("Connection on: http://localhost:%d \n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), rout))
 }
-
-/*
-    //create router
-    router := mux.NewRouter()
-    router.HandleFunc("/users", getUsers(db)).Methods("GET")
-    router.HandleFunc("/users/{id}", getUser(db)).Methods("GET")
-    router.HandleFunc("/users", createUser(db)).Methods("POST")
-    router.HandleFunc("/users/{id}", updateUser(db)).Methods("PUT")
-    router.HandleFunc("/users/{id}", deleteUser(db)).Methods("DELETE")
-
-    //start server
-    log.Fatal(http.ListenAndServe(":8000", jsonContentTypeMiddleware(router)))
-}
-
-func jsonContentTypeMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        w.Header().Set("Content-Type", "application/json")
-        next.ServeHTTP(w, r)
-    })
-}*/
